@@ -1,20 +1,31 @@
 //Add book controller
-export const addBooks = async (req, res, next) => {
+export const postBooks = async (req, res) => {
   try {
     const book = await Book.create(req.body);
-    await book.save();
-    res.status(201).json({ message: "Book added successfully" });
+    const newBook = await book.save();
+    res.status(201).json({ message: "Book added successfully", newBook});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-//Fetch book controller
-export const getBooks = async (req, res, next) => {
+//Get all books  controller
+export const getBooks = async (req, res) => {
   try {
-    const book = await Book.find(req.body);
-    res.status(200).json({ message: "Book fetched successfully" });
+    const allBooks = await Book.find(req.body);
+    res.status(200).json({ message: "All Books fetched successfully", allBooks });
   } catch (error) {
     res.status(304).json({ message: error.message });
   }
-};
+
+}
+  //Get a specific book by ID controller
+export const getBook = async(req, res) =>{
+       try {
+        const singleBook = await Book.findById(req.params.id)
+        res.status(200).json({ message: "Book fetched successfully", singleBook });
+       } catch (error) {
+        res.status(304).json({ message: error.message });
+       }
+  }
+
