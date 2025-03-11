@@ -85,6 +85,8 @@ export const updateBook = async (req, res, next) => {
     });
     //return response
     res.status(200).json(book)("message", "Book updated successfully");
+      const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      res.status(200).json(book)({ message: "Book updated successfully", book: book })
   } catch (error) {
     res.status(204).json({ message: error.message });
   }
@@ -102,7 +104,12 @@ export const deleteBook = async (req, res, next) => {
     // Find the book by its ID and delete it from the database
     await Book.findByIdAndDelete(req.params.id);
     //return response
-    res.status(200).json({ message: "Book deleted successfully" });
+    res.status(200).json({ message: "Book deleted successfully" })
+//Update the deleteBook(controller)
+export const deleteBook = async (req, res) => {
+  try {
+   const book =  await Book.findByIdAndDelete(req.params.id)
+    res.status(200).json({ message: "Book updated successfully", book: book })
   } catch (error) {
     res.status(204).json({ message: error.message });
   }
