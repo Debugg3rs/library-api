@@ -1,15 +1,20 @@
 import { Router } from "express";
-import { getBook, getBooks, postBooks, updateBook, deleteBook } from "../controllers/books.js";
+import {
+  getBook,
+  getBooks,
+  postBook,
+  updateBook,
+  deleteBook,
+} from "../controllers/books.js";
 
-
-const bookRoutes = Router();
+const bookRouter = Router();
 
 // Define routes
-bookRoutes.get("/books", getBooks );
-bookRoutes.get("/books/:id", getBook);
-bookRoutes.post("/books", postBooks);
+bookRouter.get("/books", getBooks);
+bookRouter.get("/books/:id", getBook);
+bookRouter.post("/books", postBook);
 
-booksRouter.patch("books/:id", updateBook)
-booksRouter.delete("books/:id", deleteBook)
+bookRouter.patch("books/:id", updateBook);
+bookRouter.delete("books/:id", deleteBook);
 
-export default bookRoutes;
+export default bookRouter;
