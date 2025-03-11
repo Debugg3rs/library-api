@@ -5,12 +5,14 @@ import {
   postBook,
   updateBook,
   deleteBook,
+  countBooks,
 } from "../controllers/books.js";
 
 const bookRouter = Router();
 
 // Define routes
 bookRouter.get("/books", getBooks);
+bookRouter.get("/books/count", countBooks);
 bookRouter.get("/books/:id", getBook);
 bookRouter.post("/books", postBook);
 

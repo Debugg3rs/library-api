@@ -33,6 +33,16 @@ export const getBooks = async (req, res) => {
     res.status(304).json({ message: error.message });
   }
 };
+
+export const countBooks = async (req, res) => {
+  try {
+    const booksCount = await Book.countDocuments();
+    res.status(200).json({ message: "Total Books", books: countBooks });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 //Get a specific book by ID controller
 export const getBook = async (req, res) => {
   // Validate the id input field  of the book
