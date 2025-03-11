@@ -36,8 +36,8 @@ export const getBooks = async (req, res) => {
 
 export const countBooks = async (req, res) => {
   try {
-    const booksCount = await Book.countDocuments();
-    res.status(200).json({ message: "Total Books", books: countBooks });
+    const booksCount = await Book.countDocuments({});
+    res.status(200).json({ message: "Total Books", books: booksCount });
   } catch (error) {
     res.json({ message: error.message });
   }
