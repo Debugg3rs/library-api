@@ -1,3 +1,5 @@
+import { Book } from "../models/book.js";
+
 //Add book controller
 export const postBook = async (req, res) => {
   try {
@@ -31,16 +33,17 @@ export const getBook = async(req, res) =>{
 export const updateBook = async (req, res, next) => {
   try {
       const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true })
-      res.status(200).json(book)('message', 'Book updated successfully')
+      res.status(200).json(book)({ message: "Book updated successfully", book: book })
   } catch (error) {
     res.status(204).json({ message: error.message })
   }
 };
- 
-export const deleteBook = async (req, res, next) => {
+
+//Update the deleteBook(controller)
+export const deleteBook = async (req, res) => {
   try {
-    await Book.findByIdAndDelete(req.params.id)
-    res.status(200).json({ message: 'Book deleted successfully' })
+   const book =  await Book.findByIdAndDelete(req.params.id)
+    res.status(200).json({ message: "Book updated successfully", book: book })
   } catch (error) {
     res.status(204).json({ message: error.message })
   }
