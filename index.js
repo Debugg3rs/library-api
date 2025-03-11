@@ -2,7 +2,6 @@ import config from "./utils/config.js";
 import express from "express";
 import { connect } from "mongoose";
 
-
 const app = express();
 
 // Connect to MongoDB
