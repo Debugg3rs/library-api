@@ -1,0 +1,1 @@
+MONGO_URI=mongodb+srv://library-api:byL4Slolq4uNdi57@library-api.11ync.mongodb.net/?retryWrites=true&w=majority&appName=library-api
