@@ -2,7 +2,7 @@
 export const postBook = async (req, res) => {
   try {
     const book = await Book.create(req.body);
-    res.status(201).json({ message: "Book added successfully", book});
+    res.status(201).json({ message: "Book added successfully", book: book});
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
