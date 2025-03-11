@@ -12,7 +12,7 @@ export const postBook = async (req, res) => {
       return res.status(422).json(error);
     }
     //Save book information in database
-    const book = await Book.create(req.body);
+    const book = await Book.create(value);
     //return response
     res.status(201).json({ message: "Book added successfully", book: book });
   } catch (error) {
@@ -24,15 +24,6 @@ export const postBook = async (req, res) => {
 export const getBooks = async (req, res) => {
   // Validate the request body of the book
   try {
-    const { error, value } = addBookValidator.validate(
-      {},
-      {
-        abortEarly: true,
-      }
-    );
-    if (error) {
-      return res.status(422).json(error);
-    }
     // Fetch all books from the database
     const allBooks = await Book.find();
     res
@@ -46,12 +37,6 @@ export const getBooks = async (req, res) => {
 export const getBook = async (req, res) => {
   // Validate the id input field  of the book
   try {
-    const { error, value } = addBookValidator.validate(req.params.id, {
-      abortEarly: true,
-    });
-    if (error) {
-      return res.status(422).json(error);
-    }
     // Fetch a specific book from the database
     const singleBook = await Book.findById(req.params.id);
     //return response
@@ -63,53 +48,31 @@ export const getBook = async (req, res) => {
   }
 };
 
-export const updateBook = async (req, res, next) => {
+export const updateBook = async (req, res) => {
   // Validate the request body of the book
   try {
-    const { error, value } = addBookValidator.validate(
-      (req.params.id,
-      req.body,
-      {
-        new: true,
-      }),
-      {
-        abortEarly: true,
-      }
-    );
-    if (error) {
-      return res.status(422).json(error);
-    }
     // Find the book by its ID and update it with the new data from the request body
     const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
+      runValidators: true,
     });
     //return response
-    res.status(200).json(book)("message", "Book updated successfully");
-      const book = await Book.findByIdAndUpdate(req.params.id, req.body, { new: true })
-      res.status(200).json(book)({ message: "Book updated successfully", book: book })
+    res.status(200).json(book)({
+      message: "Book updated successfully",
+      book: book,
+    });
   } catch (error) {
     res.status(204).json({ message: error.message });
   }
 };
 
-export const deleteBook = async (req, res, next) => {
+export const deleteBook = async (req, res) => {
   // Validate the request body of the book
   try {
-    const { error, value } = addBookValidator.validate(req.params.id, {
-      abortEarly: true,
-    });
-    if (error) {
-      return res.status(422).json(error);
-    }
     // Find the book by its ID and delete it from the database
     await Book.findByIdAndDelete(req.params.id);
     //return response
-    res.status(200).json({ message: "Book deleted successfully" })
-//Update the deleteBook(controller)
-export const deleteBook = async (req, res) => {
-  try {
-   const book =  await Book.findByIdAndDelete(req.params.id)
-    res.status(200).json({ message: "Book updated successfully", book: book })
+    res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
     res.status(204).json({ message: error.message });
   }
