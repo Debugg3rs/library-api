@@ -1,6 +1,15 @@
 import { Router } from "express";
-import { updateBook, deleteBook } from "../controllers/books.js";
+import { getBook, getBooks, postBooks, updateBook, deleteBook } from "../controllers/books.js";
 
-export const booksRouter = Router()
+
+const bookRoutes = Router();
+
+// Define routes
+bookRoutes.get("/books", getBooks );
+bookRoutes.get("/books/:id", getBook);
+bookRoutes.post("/books", postBooks);
+
 booksRouter.patch("books/:id", updateBook)
 booksRouter.delete("books/:id", deleteBook)
+
+export default bookRoutes;
