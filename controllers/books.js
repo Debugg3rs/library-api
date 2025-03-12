@@ -2,7 +2,7 @@ import { Book } from "../models/book.js";
 import { addBookValidator } from "../validators/books.js";
 
 //Add book controller
-export const postBook = async (req, res) => {
+export const postBook = async (req, res, next) => {
   // Validate the request body of the book
   try {
     const { error, value } = addBookValidator.validate(req.body, {
@@ -12,16 +12,16 @@ export const postBook = async (req, res) => {
       return res.status(422).json(error);
     }
     //Save book information in database
-    const book = await Book.create(value);
+    const newBook = await Book.create(value);
     //return response
-    res.status(201).json({ message: "Book added successfully", book: book });
+    res.status(201).json({ message: "Book added successfully", book: newBook });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
 //Get all books  controller
-export const getBooks = async (req, res) => {
+export const getBooks = async (req, res, next) => {
   // Validate the request body of the book
   try {
     // Fetch all books from the database
@@ -30,21 +30,21 @@ export const getBooks = async (req, res) => {
       .status(200)
       .json({ message: "All Books fetched successfully", books: allBooks });
   } catch (error) {
-    res.status(304).json({ message: error.message });
+    next(error);
   }
 };
 
-export const countBooks = async (req, res) => {
+export const countBooks = async (req, res, next) => {
   try {
     const booksCount = await Book.countDocuments({});
     res.status(200).json({ message: "Total Books", books: booksCount });
   } catch (error) {
-    res.json({ message: error.message });
+    next(error);
   }
 };
 
 //Get a specific book by ID controller
-export const getBook = async (req, res) => {
+export const getBook = async (req, res, next) => {
   // Validate the id input field  of the book
   try {
     // Fetch a specific book from the database
@@ -54,36 +54,43 @@ export const getBook = async (req, res) => {
       .status(200)
       .json({ message: "Book fetched successfully", book: singleBook });
   } catch (error) {
-    res.status(304).json({ message: error.message });
+    next(error);
   }
 };
 
-export const updateBook = async (req, res) => {
-  // Validate the request body of the book
+export const updateBook = async (req, res, next) => {
   try {
+    const bookId = req.params.id
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
     // Find the book by its ID and update it with the new data from the request body
-    const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
+    const updatedBook = await Book.findByIdAndUpdate(bookId, {...req.body }, {
+      new: true
     });
     //return response
-    res.status(200).json(book)({
+    res.status(200).json({
       message: "Book updated successfully",
-      book: book,
+      book: updateBook,
     });
   } catch (error) {
-    res.status(204).json({ message: error.message });
+    next(error);
   }
 };
 
-export const deleteBook = async (req, res) => {
-  // Validate the request body of the book
+export const deleteBook = async (req, res, next) => {
   try {
+    const bookId = req.params.id
+    const book = await Book.findById(bookId);
+    if (!book) {
+      return res.status(404).json({ message: "Book not found" });
+    }
     // Find the book by its ID and delete it from the database
     await Book.findByIdAndDelete(req.params.id);
     //return response
     res.status(200).json({ message: "Book deleted successfully" });
   } catch (error) {
-    res.status(204).json({ message: error.message });
+    next(error);
   }
 };
