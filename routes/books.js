@@ -7,6 +7,7 @@ import {
   deleteBook,
   countBooks,
 } from "../controllers/books.js";
+import { remoteUpload } from "../middlewares/upload.js";
 
 const bookRouter = Router();
 
@@ -14,7 +15,7 @@ const bookRouter = Router();
 bookRouter.get("/books", getBooks);
 bookRouter.get("/books/count", countBooks);
 bookRouter.get("/books/:id", getBook);
-bookRouter.post("/books", postBook);
+bookRouter.post("/books", remoteUpload.single("image"), postBook);
 bookRouter.patch("/books/:id", updateBook);
 bookRouter.delete("/books/:id", deleteBook);
 

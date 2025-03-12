@@ -5,8 +5,10 @@ import { addBookValidator } from "../validators/books.js";
 export const postBook = async (req, res, next) => {
   // Validate the request body of the book
   try {
-    const { error, value } = addBookValidator.validate(req.body, {
-      abortEarly: true,
+    console.log(req.body);
+    const { error, value } = addBookValidator.validate({
+      ...req.body,
+      coverImage: req.file.filename,
     });
     if (error) {
       return res.status(422).json(error);
@@ -60,19 +62,23 @@ export const getBook = async (req, res, next) => {
 
 export const updateBook = async (req, res, next) => {
   try {
-    const bookId = req.params.id
+    const bookId = req.params.id;
     const book = await Book.findById(bookId);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
     // Find the book by its ID and update it with the new data from the request body
-    const updatedBook = await Book.findByIdAndUpdate(bookId, {...req.body }, {
-      new: true
-    });
+    const updatedBook = await Book.findByIdAndUpdate(
+      bookId,
+      { ...req.body },
+      {
+        new: true,
+      }
+    );
     //return response
     res.status(200).json({
       message: "Book updated successfully",
-      book: updateBook,
+      book: updatedBook,
     });
   } catch (error) {
     next(error);
@@ -81,7 +87,7 @@ export const updateBook = async (req, res, next) => {
 
 export const deleteBook = async (req, res, next) => {
   try {
-    const bookId = req.params.id
+    const bookId = req.params.id;
     const book = await Book.findById(bookId);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
