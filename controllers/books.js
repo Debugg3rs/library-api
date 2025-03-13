@@ -1,5 +1,5 @@
 import { Book } from "../models/book.js";
-import { addBookValidator } from "../validators/books.js";
+import { addBookValidator, updateBookValidator } from "../validators/books.js";
 
 //Add book controller
 export const postBook = async (req, res, next) => {
@@ -66,14 +66,16 @@ export const updateBook = async (req, res, next) => {
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
     }
+    // Validate the request body of the book
+    const { error, value } = updateBookValidator.validate({
+      ...req.body,
+      coverImage: req.file?.filename,
+    });
+    if (error) {
+      return res.status(422).json(error);
+    }
     // Find the book by its ID and update it with the new data from the request body
-    const updatedBook = await Book.findByIdAndUpdate(
-      bookId,
-      { ...req.body },
-      {
-        new: true,
-      }
-    );
+    const updatedBook = await Book.findByIdAndUpdate(bookId, value, {new: true});
     //return response
     res.status(200).json({
       message: "Book updated successfully",
