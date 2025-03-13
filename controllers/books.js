@@ -5,10 +5,9 @@ import { addBookValidator } from "../validators/books.js";
 export const postBook = async (req, res, next) => {
   // Validate the request body of the book
   try {
-    console.log(req.body);
     const { error, value } = addBookValidator.validate({
       ...req.body,
-      coverImage: req.file.filename,
+      coverImage: req.file?.filename,
     });
     if (error) {
       return res.status(422).json(error);
