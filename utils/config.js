@@ -13,7 +13,6 @@ const MONGODB_URI = process.env.MONGODB_URI;
 const PORT = process.env.PORT;
 const SAVEFILESORG_API_KEY = process.env.SAVEFILESORG_API_KEY;
 const NODE_ENV = process.env.NODE_ENV;
-console.log(SAVEFILESORG_API_KEY);
 
 export default {
   MONGODB_URI,
