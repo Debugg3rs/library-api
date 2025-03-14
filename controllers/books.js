@@ -25,8 +25,11 @@ export const postBook = async (req, res, next) => {
 export const getBooks = async (req, res, next) => {
   // Validate the request body of the book
   try {
+    const { filter="{}", page=1, limit=0, sort="{}" } = req.query;
     // Fetch all books from the database
-    const allBooks = await Book.find();
+    const allBooks = await Book
+    .find(JSON.parse(filter))
+    .sort(JSON.parse(sort));
     res
       .status(200)
       .json({ message: "All Books fetched successfully", books: allBooks });
